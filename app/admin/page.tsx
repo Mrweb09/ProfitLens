@@ -31,7 +31,7 @@ export default async function AdminPage() {
     _count: true,
   });
 
-  const estimatedMRR = planBreakdown.reduce((sum, p) => {
+  const estimatedMRR = planBreakdown.reduce((sum: number, p) => {
     const prices: Record<string, number> = { FREE: 0, STARTER: 49, GROWTH: 99, AGENCY: 199 };
     return sum + (prices[p.plan] ?? 0) * p._count;
   }, 0);
