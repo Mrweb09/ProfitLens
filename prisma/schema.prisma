@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String   @id @default(cuid())
+  clerkId       String   @unique
+  email         String   @unique
+  name          String?
+  imageUrl      String?
+  plan          Plan     @default(FREE)
+  auditsUsed    Int      @default(0)
+  auditsLimit   Int      @default(1)
+  stripeCustomerId     String?   @unique
+  stripeSubscriptionId String?   @unique
+  stripePriceId        String?
+  stripeCurrentPeriodEnd DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  audits        Audit[]
+  scoreHistory  ScoreHistory[]
+}
+
+model Audit {
+  id              String        @id @default(cuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url             String
+  status          AuditStatus   @default(PENDING)
+  isPublic        Boolean       @default(false)
+  publicSlug      String?       @unique
+  overallScore    Int?
+  trustScore      Int?
+  uxScore         Int?
+  seoScore        Int?
+  mobileScore     Int?
+  revenueScore    Int?
+  monthlyVisitors Int?
+  currentConvRate Float?
+  potentialUplift Float?
+  revenueOpportunity Float?
+  findings        Json?
+  recommendations Json?
+  roastContent    String?
+  screenshotUrl   String?
+  reportUrl       String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  competitors     Competitor[]
+  actionItems     ActionItem[]
+}
+
+model Competitor {
+  id           String   @id @default(cuid())
+  auditId      String
+  audit        Audit    @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  url          String
+  overallScore Int?
+  trustScore   Int?
+  uxScore      Int?
+  seoScore     Int?
+  mobileScore  Int?
+  analysis     Json?
+  gapReport    Json?
+  createdAt    DateTime @default(now())
+}
+
+model ActionItem {
+  id        String   @id @default(cuid())
+  auditId   String
+  audit     Audit    @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  title     String
+  detail    String
+  priority  String
+  category  String
+  done      Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model ScoreHistory {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url          String
+  overallScore Int
+  trustScore   Int?
+  uxScore      Int?
+  seoScore     Int?
+  mobileScore  Int?
+  revenueScore Int?
+  auditId      String
+  createdAt    DateTime @default(now())
+}
+
+model FreeAuditLog {
+  id        String   @id @default(cuid())
+  ip        String   @unique
+  createdAt DateTime @default(now())
+}
+
+enum Plan {
+  FREE
+  STARTER
+  GROWTH
+  AGENCY
+}
+
+enum AuditStatus {
+  PENDING
+  ANALYZING
+  COMPLETE
+  FAILED
+}
