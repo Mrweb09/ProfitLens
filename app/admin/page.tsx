@@ -31,8 +31,8 @@ export default async function AdminPage() {
     _count: true,
   });
 
-  const estimatedMRR = planBreakdown.reduce((sum: number, p) => {
-    const prices: Record<string, number> = { FREE: 0, STARTER: 49, GROWTH: 99, AGENCY: 199 };
+  const prices: Record<string, number> = { FREE: 0, STARTER: 49, GROWTH: 99, AGENCY: 199 };
+  const estimatedMRR = planBreakdown.reduce((sum: number, p: { plan: string; _count: number }) => {
     return sum + (prices[p.plan] ?? 0) * p._count;
   }, 0);
 
@@ -85,7 +85,7 @@ export default async function AdminPage() {
           <CardHeader><CardTitle>Plan Distribution</CardTitle></CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {planBreakdown.map((p) => (
+              {planBreakdown.map((p: { plan: string; _count: number }) => (
                 <div key={p.plan} className="text-center p-4 bg-white/5 rounded-xl">
                   <div className="text-2xl font-bold text-white">{p._count}</div>
                   <div className="text-sm text-gray-400">{p.plan}</div>
@@ -100,7 +100,7 @@ export default async function AdminPage() {
           <CardHeader><CardTitle>Recent Audits</CardTitle></CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {recentAudits.map((audit) => (
+              {recentAudits.map((audit: { id: string; url: string; status: string; overallScore: number | null; user: { email: string; plan: string } }) => (
                 <div key={audit.id} className="flex items-center justify-between p-3 bg-white/5 rounded-xl text-sm">
                   <div>
                     <div className="text-white font-medium truncate max-w-xs">{audit.url}</div>
