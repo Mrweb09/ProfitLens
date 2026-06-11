@@ -99,7 +99,7 @@ export default async function PublicAuditPage({ params }: { params: Promise<{ id
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {audit.roastContent?.split("\n\n").map((para, i) => (
+                {audit.roastContent?.split("\n\n").map((para: string, i: number) => (
                   <p key={i} className="text-gray-300 leading-relaxed mb-4 last:mb-0">{para}</p>
                 ))}
               </CardContent>
