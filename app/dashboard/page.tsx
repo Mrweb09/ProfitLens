@@ -35,11 +35,12 @@ export default async function DashboardPage() {
     take: 20,
   });
 
-  const completedAudits = audits.filter((a) => a.status === "COMPLETE");
+  type AuditRow = { id: string; url: string; status: string; overallScore: number | null; revenueOpportunity: number | null; createdAt: Date };
+  const completedAudits = (audits as AuditRow[]).filter((a) => a.status === "COMPLETE");
   const avgScore = completedAudits.length
-    ? Math.round(completedAudits.reduce((sum, a) => sum + (a.overallScore ?? 0), 0) / completedAudits.length)
+    ? Math.round(completedAudits.reduce((sum: number, a) => sum + (a.overallScore ?? 0), 0) / completedAudits.length)
     : 0;
-  const totalRevOpp = completedAudits.reduce((sum, a) => sum + (a.revenueOpportunity ?? 0), 0);
+  const totalRevOpp = completedAudits.reduce((sum: number, a) => sum + (a.revenueOpportunity ?? 0), 0);
   const auditsLeft = user.auditsLimit === -1 ? "∞" : Math.max(0, user.auditsLimit - user.auditsUsed);
 
   return (
@@ -114,7 +115,7 @@ export default async function DashboardPage() {
             </Card>
           ) : (
             <div className="space-y-3">
-              {audits.map((audit) => (
+              {(audits as AuditRow[]).map((audit) => (
                 <Link key={audit.id} href={`/dashboard/audit/${audit.id}`}>
                   <Card className="hover:border-violet-500/30 transition-all cursor-pointer group">
                     <CardContent className="p-5 flex items-center justify-between">
