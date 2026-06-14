@@ -5,13 +5,15 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, Flame, Zap, TrendingUp, Star } from "lucide-react";
+import { ArrowRight, Flame, Zap, TrendingUp, Star, Mail } from "lucide-react";
 import { AuditCounter } from "./audit-counter";
 import type { AuditResult } from "@/lib/audit-engine";
 
 export function Hero() {
   const [url, setUrl] = useState("");
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showEmailCapture, setShowEmailCapture] = useState(false);
   const [freeResult, setFreeResult] = useState<AuditResult | null>(null);
   const [freeError, setFreeError] = useState("");
   const router = useRouter();
@@ -36,6 +38,7 @@ export function Hero() {
         setLoading(false);
       }
     } else {
+      setShowEmailCapture(true);
       try {
         const res = await fetch("/api/audit/free", {
           method: "POST",
@@ -47,11 +50,23 @@ export function Hero() {
           setFreeResult(data);
         } else {
           setFreeError(data.error ?? "Something went wrong");
+          setShowEmailCapture(false);
         }
       } finally {
         setLoading(false);
       }
     }
+  }
+
+  async function handleEmailSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email.trim() || !email.includes("@")) return;
+    await fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, url }),
+    });
+    setEmail("");
   }
 
   return (
@@ -107,6 +122,27 @@ export function Hero() {
 
         {freeError && (
           <p className="text-red-400 text-sm mb-4">{freeError}</p>
+        )}
+
+        {showEmailCapture && !freeResult && (
+          <div className="max-w-2xl mx-auto mb-6 glass rounded-2xl p-5 text-left">
+            <div className="flex items-center gap-2 text-violet-300 text-sm font-medium mb-3">
+              <Flame className="w-4 h-4 animate-pulse" /> Roasting your site... this takes ~30 seconds
+            </div>
+            <form onSubmit={handleEmailSubmit} className="flex gap-2">
+              <div className="flex items-center gap-2 flex-1 bg-white/5 border border-white/10 rounded-xl px-3">
+                <Mail className="w-4 h-4 text-gray-500 shrink-0" />
+                <Input
+                  type="email"
+                  placeholder="Get the full report emailed to you (optional)"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="bg-transparent border-0 focus-visible:ring-0 text-sm h-10"
+                />
+              </div>
+              <Button type="submit" variant="secondary" size="sm" disabled={!email.includes("@")}>Send</Button>
+            </form>
+          </div>
         )}
 
         {freeResult && (

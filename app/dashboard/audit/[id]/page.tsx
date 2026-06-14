@@ -16,6 +16,7 @@ import { ShareCard } from "@/components/audit/share-card";
 import { ActionPlan } from "@/components/audit/action-plan";
 import { ScoreHistoryChart } from "@/components/audit/score-history-chart";
 import { AIChat } from "@/components/audit/ai-chat";
+import { ReauditButton } from "@/components/audit/reaudit-button";
 
 export default async function AuditPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -87,8 +88,9 @@ export default async function AuditPage({ params }: { params: Promise<{ id: stri
           <h1 className="text-2xl sm:text-3xl font-bold text-white">Conversion Audit Report</h1>
         </div>
         <div className="flex items-center gap-3">
+          <ReauditButton url={audit.url} />
           <ShareButton auditId={audit.id} isPublic={audit.isPublic} />
-          <ExportPDFButton audit={audit} />
+          <ExportPDFButton audit={audit} branding={{ agencyName: dbUser.agencyName, agencyLogo: dbUser.agencyLogo, plan: dbUser.plan }} />
         </div>
       </div>
 

@@ -1,5 +1,21 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
+import { formatCurrency } from "@/lib/utils";
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const audit = await prisma.audit.findFirst({ where: { id, isPublic: true, status: "COMPLETE" } });
+  if (!audit) return {};
+  const title = `${audit.url} scored ${audit.overallScore}/100 on conversion`;
+  const description = `Revenue opportunity: ${formatCurrency(audit.revenueOpportunity ?? 0)}/month. ${audit.roastContent?.split("\n\n")[0]?.slice(0, 120) ?? ""}`;
+  return {
+    title,
+    description,
+    openGraph: { title, description, type: "website" },
+    twitter: { card: "summary_large_image", title, description },
+  };
+}
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScoreRing } from "@/components/audit/score-ring";
