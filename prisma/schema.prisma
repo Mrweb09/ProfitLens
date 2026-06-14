@@ -25,6 +25,16 @@ model User {
   updatedAt     DateTime @updatedAt
   audits        Audit[]
   scoreHistory  ScoreHistory[]
+  watchedUrls   WatchedUrl[]
+}
+
+model WatchedUrl {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url       String
+  createdAt DateTime @default(now())
+  @@unique([userId, url])
 }
 
 model Lead {

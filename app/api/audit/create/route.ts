@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import { analyzeWebsite, generateActionPlan } from "@/lib/audit-engine";
+import { sendAuditCompleteEmail } from "@/lib/email";
 import { z } from "zod";
 
 const schema = z.object({
@@ -73,10 +74,23 @@ export async function POST(req: NextRequest) {
         },
       });
 
+      // Send audit complete email
+      if (dbUser!.email) {
+        sendAuditCompleteEmail({
+          to: dbUser!.email,
+          name: dbUser!.name,
+          url,
+          auditId: audit.id,
+          overallScore: result.overallScore,
+          revenueOpportunity: result.revenueOpportunity,
+          findings: result.findings,
+        }).catch(() => null);
+      }
+
       // Generate action plan
       const tasks = await generateActionPlan(url, result.findings);
       await prisma.actionItem.createMany({
-        data: tasks.map((t) => ({
+        data: tasks.map((t: { title: string; detail: string; priority: string; category: string; order: number }) => ({
           auditId: audit.id,
           title: t.title,
           detail: t.detail,
