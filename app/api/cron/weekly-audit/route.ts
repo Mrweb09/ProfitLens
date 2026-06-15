@@ -2,6 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { analyzeWebsite } from "@/lib/audit-engine";
 import { sendWeeklyScoreEmail } from "@/lib/email";
+import { sendWeeklySlackAlert } from "@/lib/slack";
+
+type WatchedWithUser = {
+  url: string;
+  user: {
+    id: string;
+    email: string;
+    name: string | null;
+    auditsUsed: number;
+    auditsLimit: number;
+    slackWebhookUrl?: string | null;
+  };
+};
 
 export async function GET(req: NextRequest) {
   const secret = req.headers.get("authorization");
@@ -11,10 +24,10 @@ export async function GET(req: NextRequest) {
 
   const watchedUrls = await prisma.watchedUrl.findMany({
     include: { user: true },
-  });
+  }) as WatchedWithUser[];
 
   const results = await Promise.allSettled(
-    watchedUrls.map(async (watched) => {
+    watchedUrls.map(async (watched: WatchedWithUser) => {
       const { user, url } = watched;
 
       if (user.auditsLimit !== -1 && user.auditsUsed >= user.auditsLimit) return;
@@ -74,11 +87,22 @@ export async function GET(req: NextRequest) {
         currentScore: result.overallScore,
         previousScore: previous?.overallScore ?? result.overallScore,
       });
+
+      if (user.slackWebhookUrl) {
+        await sendWeeklySlackAlert({
+          webhookUrl: user.slackWebhookUrl,
+          url,
+          currentScore: result.overallScore,
+          previousScore: previous?.overallScore ?? result.overallScore,
+          auditId: audit.id,
+          appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://profitlens.com",
+        }).catch(() => null);
+      }
     })
   );
 
-  const succeeded = results.filter((r) => r.status === "fulfilled").length;
-  const failed = results.filter((r) => r.status === "rejected").length;
+  const succeeded = results.filter((r: PromiseSettledResult<unknown>) => r.status === "fulfilled").length;
+  const failed = results.filter((r: PromiseSettledResult<unknown>) => r.status === "rejected").length;
 
   return NextResponse.json({ processed: watchedUrls.length, succeeded, failed });
 }

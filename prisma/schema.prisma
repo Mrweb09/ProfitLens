@@ -19,13 +19,27 @@ model User {
   stripeSubscriptionId String?   @unique
   stripePriceId        String?
   stripeCurrentPeriodEnd DateTime?
-  agencyName    String?
-  agencyLogo    String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  audits        Audit[]
-  scoreHistory  ScoreHistory[]
-  watchedUrls   WatchedUrl[]
+  agencyName      String?
+  agencyLogo      String?
+  slackWebhookUrl String?
+  referralCode    String?   @unique
+  referredBy      String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  audits          Audit[]
+  scoreHistory    ScoreHistory[]
+  watchedUrls     WatchedUrl[]
+  apiKeys         ApiKey[]
+}
+
+model ApiKey {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String    @default("Default")
+  key       String    @unique
+  lastUsed  DateTime?
+  createdAt DateTime  @default(now())
 }
 
 model WatchedUrl {

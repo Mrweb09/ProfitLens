@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import { analyzeWebsite, generateActionPlan } from "@/lib/audit-engine";
 import { sendAuditCompleteEmail } from "@/lib/email";
+import { sendAuditSlackAlert } from "@/lib/slack";
 import { z } from "zod";
 
 const schema = z.object({
@@ -84,6 +85,18 @@ export async function POST(req: NextRequest) {
           overallScore: result.overallScore,
           revenueOpportunity: result.revenueOpportunity,
           findings: result.findings,
+        }).catch(() => null);
+      }
+
+      // Send Slack alert if configured
+      const slackUser = dbUser as unknown as { slackWebhookUrl?: string | null };
+      if (slackUser.slackWebhookUrl) {
+        sendAuditSlackAlert({
+          webhookUrl: slackUser.slackWebhookUrl,
+          url,
+          overallScore: result.overallScore,
+          auditId: audit.id,
+          appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://profitlens.com",
         }).catch(() => null);
       }
 
