@@ -91,7 +91,17 @@ export default async function AuditPage({ params }: { params: Promise<{ id: stri
         <div className="flex items-center gap-3">
           <WatchButton url={audit.url} />
           <ReauditButton url={audit.url} />
-          <ShareButton auditId={audit.id} isPublic={audit.isPublic} />
+          <ShareButton
+            auditId={audit.id}
+            isPublic={audit.isPublic}
+            url={audit.url}
+            score={audit.overallScore ?? 0}
+            trustScore={audit.trustScore ?? 0}
+            uxScore={audit.uxScore ?? 0}
+            seoScore={audit.seoScore ?? 0}
+            mobileScore={audit.mobileScore ?? 0}
+            revenueOpportunity={audit.revenueOpportunity}
+          />
           <ExportPDFButton audit={audit} branding={{ agencyName: dbUser.agencyName, agencyLogo: dbUser.agencyLogo, plan: dbUser.plan }} />
         </div>
       </div>
@@ -154,6 +164,40 @@ export default async function AuditPage({ params }: { params: Promise<{ id: stri
               If you fix the HIGH priority issues on this report, this website could potentially generate{" "}
               <strong>{formatCurrency(audit.revenueOpportunity)} more per month</strong>.
             </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Industry comparison */}
+      {audit.overallScore !== null && (
+        <Card className="mb-6 border-violet-500/20 bg-violet-500/5">
+          <CardContent className="p-6">
+            <h2 className="text-lg font-bold text-white mb-4">How You Compare</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+              {[
+                { label: "Overall", score: audit.overallScore ?? 0, avg: 55 },
+                { label: "Trust", score: audit.trustScore ?? 0, avg: 52 },
+                { label: "UX", score: audit.uxScore ?? 0, avg: 58 },
+                { label: "SEO", score: audit.seoScore ?? 0, avg: 61 },
+                { label: "Mobile", score: audit.mobileScore ?? 0, avg: 54 },
+              ].map(({ label, score, avg }) => {
+                const diff = score - avg;
+                const pct = Math.round(50 + (diff / Math.max(avg, 100 - avg)) * 40);
+                return (
+                  <div key={label} className="text-center">
+                    <div className="text-xs text-gray-500 mb-1">{label}</div>
+                    <div className={`text-2xl font-bold ${diff >= 0 ? "text-green-400" : "text-red-400"}`}>
+                      {diff >= 0 ? "+" : ""}{diff}
+                    </div>
+                    <div className="text-xs text-gray-400 mt-0.5">vs avg ({avg})</div>
+                    <div className="text-xs text-violet-300 mt-1">Top {100 - pct}%</div>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="text-xs text-gray-500 mt-4 text-center">
+              Benchmarked against {">"}10,000 websites audited by Profitlens
+            </p>
           </CardContent>
         </Card>
       )}

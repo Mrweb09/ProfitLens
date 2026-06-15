@@ -21,10 +21,10 @@ const nav = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/new", label: "New Audit", icon: Plus },
   { href: "/dashboard/competitor", label: "Competitor Check", icon: Trophy },
-  { href: "/leaderboard", label: "Leaderboard", icon: BarChart3 },
-  { href: "/dashboard/bulk", label: "Bulk Audit", icon: Zap },
-  { href: "/dashboard/api-keys", label: "API Keys", icon: Key },
-  { href: "/dashboard/referrals", label: "Referrals", icon: Gift },
+  { href: "/leaderboard", label: "Leaderboard", icon: BarChart3, isNew: true },
+  { href: "/dashboard/bulk", label: "Bulk Audit", icon: Zap, isNew: true },
+  { href: "/dashboard/api-keys", label: "API Keys", icon: Key, isNew: true },
+  { href: "/dashboard/referrals", label: "Referrals", icon: Gift, isNew: true },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
   { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
 ];
@@ -58,7 +58,12 @@ export function Sidebar() {
               )}
             >
               <item.icon className="w-4 h-4" />
-              {item.label}
+              <span className="flex-1">{item.label}</span>
+              {item.isNew && !active && (
+                <span className="text-[10px] font-bold bg-violet-600 text-white px-1.5 py-0.5 rounded-full leading-none">
+                  NEW
+                </span>
+              )}
             </Link>
           );
         })}

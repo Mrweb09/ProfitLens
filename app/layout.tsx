@@ -23,6 +23,15 @@ export const metadata: Metadata = {
     description: "Get a brutal AI-powered audit of your website. Find out exactly why visitors aren't converting.",
     type: "website",
   },
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Profitlens",
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+  },
 };
 
 export default function RootLayout({

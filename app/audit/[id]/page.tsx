@@ -1,7 +1,14 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ScoreRing } from "@/components/audit/score-ring";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Flame, Globe, TrendingUp, Lock } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -9,21 +16,15 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!audit) return {};
   const title = `${audit.url} scored ${audit.overallScore}/100 on conversion`;
   const description = `Revenue opportunity: ${formatCurrency(audit.revenueOpportunity ?? 0)}/month. ${audit.roastContent?.split("\n\n")[0]?.slice(0, 120) ?? ""}`;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://profitlens.com";
+  const ogImage = `${appUrl}/api/og?url=${encodeURIComponent(audit.url)}&score=${audit.overallScore ?? 0}&trust=${audit.trustScore ?? 0}&ux=${audit.uxScore ?? 0}&seo=${audit.seoScore ?? 0}&mobile=${audit.mobileScore ?? 0}${audit.revenueOpportunity ? `&revenue=${Math.round(audit.revenueOpportunity)}` : ""}`;
   return {
     title,
     description,
-    openGraph: { title, description, type: "website" },
-    twitter: { card: "summary_large_image", title, description },
+    openGraph: { title, description, type: "website", images: [{ url: ogImage, width: 1200, height: 630 }] },
+    twitter: { card: "summary_large_image", title, description, images: [ogImage] },
   };
 }
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ScoreRing } from "@/components/audit/score-ring";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Flame, Globe, TrendingUp, Lock } from "lucide-react";
-import { formatCurrency } from "@/lib/utils";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 export default async function PublicAuditPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -121,7 +122,36 @@ export default async function PublicAuditPage({ params }: { params: Promise<{ id
               </CardContent>
             </Card>
 
-            {/* Lead capture banner */}
+            {/* Social share + lead capture */}
+            <div className="mt-4 flex gap-3 justify-center flex-wrap">
+              {(() => {
+                const auditUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? "https://profitlens.com"}/audit/${audit.id}`;
+                const tweet = `I just roasted my website with AI and scored ${audit.overallScore}/100 🔥\n\nHere's exactly what's killing my conversions:\n${auditUrl}`;
+                return (
+                  <>
+                    <a
+                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant="outline" size="sm">
+                        𝕏 Tweet my score
+                      </Button>
+                    </a>
+                    <a
+                      href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(auditUrl)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant="outline" size="sm">
+                        in Share on LinkedIn
+                      </Button>
+                    </a>
+                  </>
+                );
+              })()}
+            </div>
+
             <div className="mt-6 rounded-2xl bg-gradient-to-r from-violet-600/20 to-purple-600/20 border border-violet-500/30 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <div className="font-bold text-white text-lg mb-1">Want us to roast YOUR website?</div>

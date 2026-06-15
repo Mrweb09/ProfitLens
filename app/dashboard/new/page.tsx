@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ArrowRight, Flame, Loader2, CheckCircle2 } from "lucide-react";
+import { UpgradeModal } from "@/components/dashboard/upgrade-modal";
 
 const steps = [
   "Fetching website structure...",
@@ -22,6 +23,7 @@ export default function NewAuditPage() {
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [error, setError] = useState("");
+  const [showUpgrade, setShowUpgrade] = useState(false);
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent) {
@@ -47,6 +49,11 @@ export default function NewAuditPage() {
 
       if (!res.ok) {
         const data = await res.json();
+        if (res.status === 403) {
+          setShowUpgrade(true);
+          setLoading(false);
+          return;
+        }
         setError(data.error || "Something went wrong. Please try again.");
         setLoading(false);
         return;
@@ -63,6 +70,7 @@ export default function NewAuditPage() {
 
   return (
     <div className="p-8 max-w-2xl mx-auto">
+      {showUpgrade && <UpgradeModal onClose={() => setShowUpgrade(false)} />
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-white mb-2">New Audit</h1>
         <p className="text-gray-400">Enter your website URL and we&apos;ll roast it in under 60 seconds.</p>
