@@ -45,31 +45,31 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <PHProvider>
-        <html
-          lang="en"
-          className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-        >
-          <body className="min-h-full flex flex-col bg-[#09090b] text-white">
+      <html
+        lang="en"
+        className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      >
+        <body className="min-h-full flex flex-col bg-[#09090b] text-white">
+          <PHProvider>
             <Suspense>
               <PostHogPageview />
             </Suspense>
             {children}
-            <Analytics />
-            <Script id="crisp-chat" strategy="afterInteractive">{`
-              window.$crisp=[];
-              window.CRISP_WEBSITE_ID="8f3f7020-221d-40db-b497-4c0c9de6d1aa";
-              (function(){
-                var d=document;
-                var s=d.createElement("script");
-                s.src="https://client.crisp.chat/l.js";
-                s.async=1;
-                d.getElementsByTagName("head")[0].appendChild(s);
-              })();
-            `}</Script>
-          </body>
-        </html>
-      </PHProvider>
+          </PHProvider>
+          <Analytics />
+          <Script id="crisp-chat" strategy="afterInteractive">{`
+            window.$crisp=[];
+            window.CRISP_WEBSITE_ID="8f3f7020-221d-40db-b497-4c0c9de6d1aa";
+            (function(){
+              var d=document;
+              var s=d.createElement("script");
+              s.src="https://client.crisp.chat/l.js";
+              s.async=1;
+              d.getElementsByTagName("head")[0].appendChild(s);
+            })();
+          `}</Script>
+        </body>
+      </html>
     </ClerkProvider>
   );
 }
