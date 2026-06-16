@@ -2,7 +2,7 @@
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = "AuditRoast <reports@AuditRoast.com>";
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://profit-lens-chi.vercel.app";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://auditroast.com";
 
 export async function sendAuditCompleteEmail({
   to,
