@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
@@ -19,7 +19,7 @@ const faqs = [
   },
   {
     q: "Can I use this for client websites?",
-    a: "Absolutely. The Growth and Agency plans are built for agencies. You get white-label PDF reports, multiple competitor comparisons, and team accounts. Many agency owners use Profitlens as part of their website audit service.",
+    a: "Absolutely. The Growth and Agency plans are built for agencies. You get white-label PDF reports, multiple competitor comparisons, and team accounts. Many agency owners use AuditRoast as part of their website audit service.",
   },
   {
     q: "What if I disagree with a finding?",
@@ -34,7 +34,7 @@ const faqs = [
     a: "Yes, cancel anytime from your dashboard. You'll keep access until the end of your billing period. We also offer a 7-day money-back guarantee if you're not satisfied.",
   },
   {
-    q: "What websites work best with Profitlens?",
+    q: "What websites work best with AuditRoast?",
     a: "Any website that relies on conversions: eCommerce stores, SaaS landing pages, service business sites, local business websites, and portfolio sites. If your site is supposed to generate leads or sales, we can audit it.",
   },
 ];
@@ -90,3 +90,4 @@ export function FAQ() {
     </section>
   );
 }
+

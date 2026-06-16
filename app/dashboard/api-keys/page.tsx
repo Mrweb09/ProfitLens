@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -84,7 +84,7 @@ export default function ApiKeysPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-white">API Keys</h1>
-          <p className="text-gray-400 text-sm mt-1">Use the Profitlens API to run audits programmatically.</p>
+          <p className="text-gray-400 text-sm mt-1">Use the AuditRoast API to run audits programmatically.</p>
         </div>
         <Button variant="gradient" size="sm" onClick={() => setShowForm(true)}>
           <Plus className="w-4 h-4 mr-1" /> New Key
@@ -159,7 +159,7 @@ export default function ApiKeysPage() {
         <CardContent className="space-y-4">
           <div>
             <p className="text-xs text-gray-400 mb-2">Run an audit via API:</p>
-            <pre className="bg-black/40 rounded-lg p-3 text-xs text-gray-300 overflow-x-auto">{`POST ${process.env.NEXT_PUBLIC_APP_URL ?? "https://profitlens.com"}/api/v1/audit
+            <pre className="bg-black/40 rounded-lg p-3 text-xs text-gray-300 overflow-x-auto">{`POST ${process.env.NEXT_PUBLIC_APP_URL ?? "https://AuditRoast.com"}/api/v1/audit
 Authorization: Bearer pl_live_...
 Content-Type: application/json
 
@@ -175,7 +175,7 @@ Content-Type: application/json
   "seoScore": 72,
   "mobileScore": 65,
   "revenueOpportunity": 3200,
-  "dashboardUrl": "https://profitlens.com/dashboard/audit/..."
+  "dashboardUrl": "https://AuditRoast.com/dashboard/audit/..."
 }`}</pre>
           </div>
         </CardContent>
@@ -183,3 +183,4 @@ Content-Type: application/json
     </div>
   );
 }
+

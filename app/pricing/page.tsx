@@ -1,10 +1,10 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Check, Flame, Zap } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pricing — Profitlens",
+  title: "Pricing — AuditRoast",
   description: "Start free. Upgrade when you're ready. No contracts, cancel anytime.",
 };
 
@@ -119,7 +119,7 @@ export default function PricingPage() {
             <div className="w-8 h-8 bg-gradient-to-br from-violet-600 to-purple-600 rounded-lg flex items-center justify-center">
               <Flame className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-lg text-white">Profitlens</span>
+            <span className="font-bold text-lg text-white">AuditRoast</span>
           </Link>
           <div className="flex items-center gap-3">
             <Link href="/sign-in"><Button variant="ghost" size="sm">Sign in</Button></Link>
@@ -266,3 +266,4 @@ export default function PricingPage() {
     </div>
   );
 }
+

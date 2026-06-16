@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -32,7 +32,7 @@ export function BrandingSettings({ agencyName: initial, agencyLogo: initialLogo 
           onChange={(e) => setAgencyName(e.target.value)}
           placeholder="e.g. Acme Digital"
         />
-        <p className="text-xs text-gray-600 mt-1">Appears in the PDF header and footer instead of &quot;Profitlens&quot;</p>
+        <p className="text-xs text-gray-600 mt-1">Appears in the PDF header and footer instead of &quot;AuditRoast&quot;</p>
       </div>
       <div>
         <label className="block text-sm text-gray-400 mb-1">Logo URL (optional)</label>
@@ -49,3 +49,4 @@ export function BrandingSettings({ agencyName: initial, agencyLogo: initialLogo 
     </div>
   );
 }
+

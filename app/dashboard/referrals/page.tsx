@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,7 +30,7 @@ export default function ReferralsPage() {
   };
 
   const referralLink = referralCode
-    ? `${process.env.NEXT_PUBLIC_APP_URL ?? "https://profitlens.com"}/?ref=${referralCode}`
+    ? `${process.env.NEXT_PUBLIC_APP_URL ?? "https://AuditRoast.com"}/?ref=${referralCode}`
     : "";
 
   const copy = () => {
@@ -43,7 +43,7 @@ export default function ReferralsPage() {
     <div className="p-6 lg:p-8 max-w-2xl mx-auto">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-white">Referral Programme</h1>
-        <p className="text-gray-400 text-sm mt-1">Share Profitlens and earn free audit credits.</p>
+        <p className="text-gray-400 text-sm mt-1">Share AuditRoast and earn free audit credits.</p>
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-8">
@@ -96,3 +96,4 @@ export default function ReferralsPage() {
     </div>
   );
 }
+

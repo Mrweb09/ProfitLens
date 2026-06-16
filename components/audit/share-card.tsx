@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,7 @@ export function ShareCard({ url, overallScore, trustScore, uxScore, seoScore, mo
         useCORS: true,
       });
       const link = document.createElement("a");
-      link.download = `profitlens-audit-${Date.now()}.png`;
+      link.download = `AuditRoast-audit-${Date.now()}.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
     } finally {
@@ -60,7 +60,7 @@ export function ShareCard({ url, overallScore, trustScore, uxScore, seoScore, mo
           <div style={{ width: 32, height: 32, background: "linear-gradient(135deg, #7c3aed, #9333ea)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <span style={{ color: "white", fontSize: 16 }}>🔥</span>
           </div>
-          <span style={{ color: "white", fontWeight: 700, fontSize: 18 }}>Profitlens</span>
+          <span style={{ color: "white", fontWeight: 700, fontSize: 18 }}>AuditRoast</span>
         </div>
 
         <div style={{ color: "#9ca3af", fontSize: 13, marginBottom: 8 }}>Conversion Audit for</div>
@@ -90,7 +90,7 @@ export function ShareCard({ url, overallScore, trustScore, uxScore, seoScore, mo
         )}
 
         <div style={{ marginTop: 20, textAlign: "center", color: "#6b7280", fontSize: 12 }}>
-          profitlens.com — AI Website Conversion Auditor
+          AuditRoast.com — AI Website Conversion Auditor
         </div>
       </div>
 
@@ -101,3 +101,4 @@ export function ShareCard({ url, overallScore, trustScore, uxScore, seoScore, mo
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-import { ImageResponse } from "next/og";
+﻿import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 
 export const runtime = "edge";
@@ -67,7 +67,7 @@ export async function GET(req: NextRequest) {
             >
               🔥
             </div>
-            <span style={{ color: "white", fontSize: 28, fontWeight: 800, letterSpacing: -0.5 }}>Profitlens</span>
+            <span style={{ color: "white", fontSize: 28, fontWeight: 800, letterSpacing: -0.5 }}>AuditRoast</span>
           </div>
           <div
             style={{
@@ -174,7 +174,7 @@ export async function GET(req: NextRequest) {
         {/* Footer */}
         <div style={{ display: "flex", justifyContent: "center", marginTop: 30 }}>
           <span style={{ color: "rgba(255,255,255,0.3)", fontSize: 14 }}>
-            Get your free audit at profitlens.com
+            Get your free audit at AuditRoast.com
           </span>
         </div>
       </div>
@@ -182,3 +182,4 @@ export async function GET(req: NextRequest) {
     { width: 1200, height: 630 }
   );
 }
+

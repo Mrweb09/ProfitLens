@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { analyzeWebsite } from "@/lib/audit-engine";
 import { sendWeeklyScoreEmail } from "@/lib/email";
@@ -95,7 +95,7 @@ export async function GET(req: NextRequest) {
           currentScore: result.overallScore,
           previousScore: previous?.overallScore ?? result.overallScore,
           auditId: audit.id,
-          appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://profitlens.com",
+          appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://AuditRoast.com",
         }).catch(() => null);
       }
     })
@@ -106,3 +106,4 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({ processed: watchedUrls.length, succeeded, failed });
 }
+

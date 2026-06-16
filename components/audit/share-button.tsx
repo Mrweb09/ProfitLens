@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -49,7 +49,7 @@ export function ShareButton({
   const [open, setOpen] = useState(false);
 
   const auditUrl = typeof window !== "undefined" ? `${window.location.origin}/audit/${auditId}` : `/audit/${auditId}`;
-  const appUrl = typeof window !== "undefined" ? window.location.origin : "https://profitlens.com";
+  const appUrl = typeof window !== "undefined" ? window.location.origin : "https://AuditRoast.com";
 
   const ogImageUrl = `${appUrl}/api/og?url=${encodeURIComponent(url)}&score=${score}&trust=${trustScore}&ux=${uxScore}&seo=${seoScore}&mobile=${mobileScore}${revenueOpportunity ? `&revenue=${Math.round(revenueOpportunity)}` : ""}`;
 
@@ -75,7 +75,7 @@ export function ShareButton({
 
   async function shareTwitter() {
     await ensurePublic();
-    const text = `I just roasted my website with AI and scored ${score}/100 🔥\n\nHere's exactly what's killing my conversions:\n${auditUrl}\n\n(via @profitlens)`;
+    const text = `I just roasted my website with AI and scored ${score}/100 🔥\n\nHere's exactly what's killing my conversions:\n${auditUrl}\n\n(via @AuditRoast)`;
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, "_blank");
     setOpen(false);
   }
@@ -88,7 +88,7 @@ export function ShareButton({
 
   async function copyEmbed() {
     await ensurePublic();
-    const embed = `<a href="${auditUrl}" target="_blank" rel="noopener"><img src="${appUrl}/api/badge/${auditId}" alt="Profitlens score: ${score}/100" width="200" height="40" /></a>`;
+    const embed = `<a href="${auditUrl}" target="_blank" rel="noopener"><img src="${appUrl}/api/badge/${auditId}" alt="AuditRoast score: ${score}/100" width="200" height="40" /></a>`;
     navigator.clipboard.writeText(embed);
     setCopied("embed");
     setTimeout(() => setCopied(null), 2000);
@@ -147,3 +147,4 @@ export function ShareButton({
     </div>
   );
 }
+

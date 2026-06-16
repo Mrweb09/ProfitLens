@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import { analyzeWebsite, generateActionPlan } from "@/lib/audit-engine";
@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
           url,
           overallScore: result.overallScore,
           auditId: audit.id,
-          appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://profitlens.com",
+          appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://AuditRoast.com",
         }).catch(() => null);
       }
 
@@ -128,3 +128,4 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ id: audit.id });
 }
+

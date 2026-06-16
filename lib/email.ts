@@ -1,7 +1,7 @@
-import { Resend } from "resend";
+﻿import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = "Profitlens <reports@profitlens.com>";
+const FROM = "AuditRoast <reports@AuditRoast.com>";
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://profit-lens-chi.vercel.app";
 
 export async function sendAuditCompleteEmail({
@@ -34,7 +34,7 @@ export async function sendAuditCompleteEmail({
 <body style="margin:0;padding:0;background:#09090b;font-family:helvetica,sans-serif;color:#e5e7eb;">
 <div style="max-width:600px;margin:0 auto;padding:40px 20px;">
   <div style="margin-bottom:32px;">
-    <span style="font-size:22px;font-weight:800;color:#fff;">🔥 Profitlens</span>
+    <span style="font-size:22px;font-weight:800;color:#fff;">🔥 AuditRoast</span>
   </div>
 
   <h1 style="font-size:24px;font-weight:700;color:#fff;margin:0 0 8px;">Your audit is ready, ${name ?? "there"}!</h1>
@@ -68,7 +68,7 @@ export async function sendAuditCompleteEmail({
   </a>
 
   <p style="font-size:12px;color:#4b5563;text-align:center;">
-    Profitlens · <a href="${APP_URL}" style="color:#7c3aed;">profitlens.com</a>
+    AuditRoast · <a href="${APP_URL}" style="color:#7c3aed;">AuditRoast.com</a>
   </p>
 </div>
 </body>
@@ -106,7 +106,7 @@ export async function sendWeeklyScoreEmail({
 <body style="margin:0;padding:0;background:#09090b;font-family:helvetica,sans-serif;color:#e5e7eb;">
 <div style="max-width:600px;margin:0 auto;padding:40px 20px;">
   <div style="margin-bottom:32px;">
-    <span style="font-size:22px;font-weight:800;color:#fff;">🔥 Profitlens</span>
+    <span style="font-size:22px;font-weight:800;color:#fff;">🔥 AuditRoast</span>
   </div>
 
   <h1 style="font-size:24px;font-weight:700;color:#fff;margin:0 0 8px;">Weekly Score Update</h1>
@@ -136,10 +136,11 @@ export async function sendWeeklyScoreEmail({
   </a>
 
   <p style="font-size:12px;color:#4b5563;text-align:center;">
-    Profitlens · <a href="${APP_URL}/dashboard" style="color:#7c3aed;">Manage email preferences</a>
+    AuditRoast · <a href="${APP_URL}/dashboard" style="color:#7c3aed;">Manage email preferences</a>
   </p>
 </div>
 </body>
 </html>`,
   });
 }
+

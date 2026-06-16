@@ -1,4 +1,4 @@
-import { Star, Quote } from "lucide-react";
+﻿import { Star, Quote } from "lucide-react";
 
 const testimonials = [
   {
@@ -7,7 +7,7 @@ const testimonials = [
     company: "Bloom Boutique",
     avatar: "SM",
     rating: 5,
-    text: "Profitlens told me my checkout button was invisible on mobile. Fixed it in 20 minutes and my conversion rate jumped from 1.2% to 3.8%. That's an extra £4,200/month. Best £49 I've ever spent.",
+    text: "AuditRoast told me my checkout button was invisible on mobile. Fixed it in 20 minutes and my conversion rate jumped from 1.2% to 3.8%. That's an extra £4,200/month. Best £49 I've ever spent.",
     revenue: "+£4,200/mo",
   },
   {
@@ -34,7 +34,7 @@ const testimonials = [
     company: "LegalFirst UK",
     avatar: "TD",
     rating: 5,
-    text: "We had no idea our trust signals were so weak. Profitlens flagged missing SSL indicators, no client testimonials on the contact page, and zero social proof above the fold. Fixed all three and lead quality improved massively.",
+    text: "We had no idea our trust signals were so weak. AuditRoast flagged missing SSL indicators, no client testimonials on the contact page, and zero social proof above the fold. Fixed all three and lead quality improved massively.",
     revenue: "+£6,800/mo",
   },
   {
@@ -72,7 +72,7 @@ export function Testimonials() {
             <span className="gradient-text">They got paid.</span>
           </h2>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Over 500 businesses have used Profitlens to unlock hidden revenue.
+            Over 500 businesses have used AuditRoast to unlock hidden revenue.
           </p>
         </div>
 
@@ -129,3 +129,4 @@ export function Testimonials() {
     </section>
   );
 }
+

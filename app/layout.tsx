@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
@@ -15,11 +15,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Profitlens — AI Website Conversion Auditor",
+  title: "AuditRoast — AI Website Conversion Auditor",
   description: "Get a brutal AI-powered audit of your website. Find out exactly why visitors aren't converting — and get exact fixes to boost revenue.",
   keywords: ["website audit", "conversion rate optimization", "CRO", "website analysis", "UX audit"],
   openGraph: {
-    title: "Profitlens — AI Website Conversion Auditor",
+    title: "AuditRoast — AI Website Conversion Auditor",
     description: "Get a brutal AI-powered audit of your website. Find out exactly why visitors aren't converting.",
     type: "website",
   },
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Profitlens",
+    title: "AuditRoast",
   },
   other: {
     "mobile-web-app-capable": "yes",
@@ -53,3 +53,4 @@ export default function RootLayout({
     </ClerkProvider>
   );
 }
+

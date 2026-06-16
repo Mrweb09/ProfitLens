@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -39,7 +39,7 @@ export function Sidebar() {
           <div className="w-8 h-8 bg-gradient-to-br from-violet-600 to-purple-600 rounded-lg flex items-center justify-center">
             <Flame className="w-5 h-5 text-white" />
           </div>
-          <span className="font-bold text-lg text-white">Profitlens</span>
+          <span className="font-bold text-lg text-white">AuditRoast</span>
         </Link>
       </div>
 
@@ -78,3 +78,4 @@ export function Sidebar() {
     </aside>
   );
 }
+

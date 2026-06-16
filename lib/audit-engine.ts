@@ -1,9 +1,9 @@
-import { groq } from "./groq";
+ï»¿import { groq } from "./groq";
 
 async function fetchWebsiteContent(url: string): Promise<string> {
   try {
     const res = await fetch(url, {
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; ProfitLens/1.0)" },
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; AuditRoast/1.0)" },
       signal: AbortSignal.timeout(10000),
     });
 
@@ -280,3 +280,4 @@ Identify 6-8 specific gaps where the competitor outperforms. Be very specific â€
   const cleaned = content.replace(/```json\n?/g, "").replace(/```\n?/g, "");
   return JSON.parse(cleaned);
 }
+

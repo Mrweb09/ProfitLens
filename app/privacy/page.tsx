@@ -1,9 +1,9 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Flame } from "lucide-react";
 
 export const metadata = {
-  title: "Privacy Policy — Profitlens",
-  description: "How Profitlens collects, uses, and protects your data.",
+  title: "Privacy Policy — AuditRoast",
+  description: "How AuditRoast collects, uses, and protects your data.",
 };
 
 export default function PrivacyPage() {
@@ -15,7 +15,7 @@ export default function PrivacyPage() {
             <div className="w-8 h-8 bg-gradient-to-br from-violet-600 to-purple-600 rounded-lg flex items-center justify-center">
               <Flame className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-lg text-white">Profitlens</span>
+            <span className="font-bold text-lg text-white">AuditRoast</span>
           </Link>
         </div>
       </nav>
@@ -28,8 +28,8 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-bold text-white mb-3">1. Who We Are</h2>
             <p>
-              Profitlens (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) provides AI-powered website conversion auditing services at profitlens.com. If you have any questions about this policy, contact us at{" "}
-              <a href="mailto:support@profitlens.com" className="text-violet-400 hover:text-violet-300">support@profitlens.com</a>.
+              AuditRoast (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) provides AI-powered website conversion auditing services at AuditRoast.com. If you have any questions about this policy, contact us at{" "}
+              <a href="mailto:support@AuditRoast.com" className="text-violet-400 hover:text-violet-300">support@AuditRoast.com</a>.
             </p>
           </section>
 
@@ -48,7 +48,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-bold text-white mb-3">3. How We Use Your Data</h2>
             <ul className="space-y-2 list-disc list-inside text-gray-400">
-              <li>To provide, operate, and improve the Profitlens service.</li>
+              <li>To provide, operate, and improve the AuditRoast service.</li>
               <li>To process payments and manage your subscription.</li>
               <li>To send transactional emails (receipt, account notifications). We do not send marketing emails unless you opt in.</li>
               <li>To detect and prevent fraud and abuse.</li>
@@ -78,7 +78,7 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold text-white mb-3">6. Data Retention</h2>
             <p>
               Audit results and account data are retained for as long as your account is active. If you delete your account, your data is permanently deleted within 30 days. You may request deletion at any time by emailing{" "}
-              <a href="mailto:support@profitlens.com" className="text-violet-400 hover:text-violet-300">support@profitlens.com</a>.
+              <a href="mailto:support@AuditRoast.com" className="text-violet-400 hover:text-violet-300">support@AuditRoast.com</a>.
             </p>
           </section>
 
@@ -94,7 +94,7 @@ export default function PrivacyPage() {
             </ul>
             <p className="mt-3">
               To exercise any of these rights, email{" "}
-              <a href="mailto:support@profitlens.com" className="text-violet-400 hover:text-violet-300">support@profitlens.com</a>.
+              <a href="mailto:support@AuditRoast.com" className="text-violet-400 hover:text-violet-300">support@AuditRoast.com</a>.
             </p>
           </section>
 
@@ -116,7 +116,7 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold text-white mb-3">10. Contact</h2>
             <p>
               Questions or concerns? Email us at{" "}
-              <a href="mailto:support@profitlens.com" className="text-violet-400 hover:text-violet-300">support@profitlens.com</a>.
+              <a href="mailto:support@AuditRoast.com" className="text-violet-400 hover:text-violet-300">support@AuditRoast.com</a>.
             </p>
           </section>
         </div>
@@ -130,3 +130,4 @@ export default function PrivacyPage() {
     </div>
   );
 }
+

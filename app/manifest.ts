@@ -1,9 +1,9 @@
-import type { MetadataRoute } from "next";
+﻿import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Profitlens — AI Conversion Auditor",
-    short_name: "Profitlens",
+    name: "AuditRoast — AI Conversion Auditor",
+    short_name: "AuditRoast",
     description: "AI-powered website conversion auditor. Find out exactly why visitors aren't converting.",
     start_url: "/dashboard",
     display: "standalone",
@@ -33,3 +33,4 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
   };
 }
+

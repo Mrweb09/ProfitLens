@@ -1,9 +1,9 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Flame, ShieldCheck } from "lucide-react";
 
 export const metadata = {
-  title: "Refund Policy — Profitlens",
-  description: "Profitlens 7-day money-back guarantee and refund policy.",
+  title: "Refund Policy — AuditRoast",
+  description: "AuditRoast 7-day money-back guarantee and refund policy.",
 };
 
 export default function RefundsPage() {
@@ -15,7 +15,7 @@ export default function RefundsPage() {
             <div className="w-8 h-8 bg-gradient-to-br from-violet-600 to-purple-600 rounded-lg flex items-center justify-center">
               <Flame className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-lg text-white">Profitlens</span>
+            <span className="font-bold text-lg text-white">AuditRoast</span>
           </Link>
         </div>
       </nav>
@@ -39,7 +39,7 @@ export default function RefundsPage() {
           <section>
             <h2 className="text-xl font-bold text-white mb-3">Our Guarantee</h2>
             <p>
-              We stand behind the quality of Profitlens. If you subscribe to any paid plan and are not satisfied within the first 7 days, we will issue a full refund with no questions asked.
+              We stand behind the quality of AuditRoast. If you subscribe to any paid plan and are not satisfied within the first 7 days, we will issue a full refund with no questions asked.
             </p>
           </section>
 
@@ -47,7 +47,7 @@ export default function RefundsPage() {
             <h2 className="text-xl font-bold text-white mb-3">How to Request a Refund</h2>
             <p className="mb-4">
               Email us at{" "}
-              <a href="mailto:support@profitlens.com" className="text-violet-400 hover:text-violet-300">support@profitlens.com</a>{" "}
+              <a href="mailto:support@AuditRoast.com" className="text-violet-400 hover:text-violet-300">support@AuditRoast.com</a>{" "}
               from the email address associated with your account. Include the subject line <span className="text-white font-medium">&quot;Refund Request&quot;</span>.
             </p>
             <p>
@@ -78,7 +78,7 @@ export default function RefundsPage() {
             <h2 className="text-xl font-bold text-white mb-3">Contact</h2>
             <p>
               Any questions about refunds? Email{" "}
-              <a href="mailto:support@profitlens.com" className="text-violet-400 hover:text-violet-300">support@profitlens.com</a>{" "}
+              <a href="mailto:support@AuditRoast.com" className="text-violet-400 hover:text-violet-300">support@AuditRoast.com</a>{" "}
               and we&apos;ll get back to you within 1 business day.
             </p>
           </section>
@@ -93,3 +93,4 @@ export default function RefundsPage() {
     </div>
   );
 }
+
