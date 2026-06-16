@@ -2,6 +2,9 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
+import { Suspense } from "react";
+import { PHProvider } from "./providers";
+import { PostHogPageview } from "./posthog-pageview";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -41,15 +44,20 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html
-        lang="en"
-        className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-      >
-        <body className="min-h-full flex flex-col bg-[#09090b] text-white">
-          {children}
-          <Analytics />
-        </body>
-      </html>
+      <PHProvider>
+        <html
+          lang="en"
+          className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+        >
+          <body className="min-h-full flex flex-col bg-[#09090b] text-white">
+            <Suspense>
+              <PostHogPageview />
+            </Suspense>
+            {children}
+            <Analytics />
+          </body>
+        </html>
+      </PHProvider>
     </ClerkProvider>
   );
 }
