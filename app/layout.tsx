@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
 import { Suspense } from "react";
+import Script from "next/script";
 import { PHProvider } from "./providers";
 import { PostHogPageview } from "./posthog-pageview";
 import "./globals.css";
@@ -55,6 +56,17 @@ export default function RootLayout({
             </Suspense>
             {children}
             <Analytics />
+            <Script id="crisp-chat" strategy="afterInteractive">{`
+              window.$crisp=[];
+              window.CRISP_WEBSITE_ID="8f3f7020-221d-40db-b497-4c0c9de6d1aa";
+              (function(){
+                var d=document;
+                var s=d.createElement("script");
+                s.src="https://client.crisp.chat/l.js";
+                s.async=1;
+                d.getElementsByTagName("head")[0].appendChild(s);
+              })();
+            `}</Script>
           </body>
         </html>
       </PHProvider>
