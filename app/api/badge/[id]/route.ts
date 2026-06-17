@@ -25,7 +25,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     </linearGradient>
   </defs>
   <rect width="200" height="40" rx="8" fill="url(#bg)" stroke="rgba(124,58,237,0.4)" stroke-width="1"/>
-  <text x="12" y="15" font-family="sans-serif" font-size="10" fill="rgba(255,255,255,0.5)">Audited by Profitlens</text>
+  <text x="12" y="15" font-family="sans-serif" font-size="10" fill="rgba(255,255,255,0.5)">Audited by AuditRoast</text>
   <text x="12" y="31" font-family="sans-serif" font-size="12" font-weight="bold" fill="white">Score: </text>
   <text x="53" y="31" font-family="sans-serif" font-size="12" font-weight="bold" fill="${color}">${score}/100 — ${label}</text>
 </svg>`;

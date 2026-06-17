@@ -196,7 +196,7 @@ export default async function AuditPage({ params }: { params: Promise<{ id: stri
               })}
             </div>
             <p className="text-xs text-gray-500 mt-4 text-center">
-              Benchmarked against {">"}10,000 websites audited by Profitlens
+              Benchmarked against {">"}10,000 websites audited by AuditRoast
             </p>
           </CardContent>
         </Card>

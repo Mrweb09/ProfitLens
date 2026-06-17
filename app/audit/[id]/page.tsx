@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!audit) return {};
   const title = `${audit.url} scored ${audit.overallScore}/100 on conversion`;
   const description = `Revenue opportunity: ${formatCurrency(audit.revenueOpportunity ?? 0)}/month. ${audit.roastContent?.split("\n\n")[0]?.slice(0, 120) ?? ""}`;
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://profitlens.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://auditroast.com";
   const ogImage = `${appUrl}/api/og?url=${encodeURIComponent(audit.url)}&score=${audit.overallScore ?? 0}&trust=${audit.trustScore ?? 0}&ux=${audit.uxScore ?? 0}&seo=${audit.seoScore ?? 0}&mobile=${audit.mobileScore ?? 0}${audit.revenueOpportunity ? `&revenue=${Math.round(audit.revenueOpportunity)}` : ""}`;
   return {
     title,
@@ -43,7 +43,7 @@ export default async function PublicAuditPage({ params }: { params: Promise<{ id
             <div className="w-8 h-8 bg-gradient-to-br from-violet-600 to-purple-600 rounded-lg flex items-center justify-center">
               <Flame className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-lg text-white">Profitlens</span>
+            <span className="font-bold text-lg text-white">AuditRoast</span>
           </Link>
           <Link href="/sign-up">
             <Button variant="gradient" size="sm">Audit My Site Free</Button>
@@ -125,7 +125,7 @@ export default async function PublicAuditPage({ params }: { params: Promise<{ id
             {/* Social share + lead capture */}
             <div className="mt-4 flex gap-3 justify-center flex-wrap">
               {(() => {
-                const auditUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? "https://profitlens.com"}/audit/${audit.id}`;
+                const auditUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? "https://auditroast.com"}/audit/${audit.id}`;
                 const tweet = `I just roasted my website with AI and scored ${audit.overallScore}/100 🔥\n\nHere's exactly what's killing my conversions:\n${auditUrl}`;
                 return (
                   <>
