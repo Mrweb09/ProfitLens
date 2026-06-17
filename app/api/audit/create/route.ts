@@ -1,5 +1,5 @@
 ﻿import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import { analyzeWebsite, generateActionPlan } from "@/lib/audit-engine";
 import { sendAuditCompleteEmail } from "@/lib/email";
@@ -25,7 +25,17 @@ export async function POST(req: NextRequest) {
 
   let dbUser = await prisma.user.findUnique({ where: { clerkId: userId } });
   if (!dbUser) {
-    return NextResponse.json({ error: "User not found. Please refresh the page." }, { status: 404 });
+    const clerkUser = await currentUser();
+    const email = clerkUser?.emailAddresses[0]?.emailAddress;
+    if (email) {
+      const byEmail = await prisma.user.findUnique({ where: { email } });
+      if (byEmail) {
+        dbUser = await prisma.user.update({ where: { email }, data: { clerkId: userId } });
+      }
+    }
+    if (!dbUser) {
+      return NextResponse.json({ error: "User not found. Please visit the dashboard first." }, { status: 404 });
+    }
   }
 
   if (dbUser.auditsLimit !== -1 && dbUser.auditsUsed >= dbUser.auditsLimit) {

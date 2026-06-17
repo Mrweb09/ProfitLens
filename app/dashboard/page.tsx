@@ -47,12 +47,12 @@ export default async function DashboardPage() {
   const auditsLeft = user.auditsLimit === -1 ? "∞" : Math.max(0, user.auditsLimit - user.auditsUsed);
 
   return (
-    <div className="p-8">
+    <div className="p-4 sm:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white">
               Welcome back{clerkUser.firstName ? `, ${clerkUser.firstName}` : ""}
             </h1>
             <p className="text-gray-400 mt-1">
@@ -60,7 +60,7 @@ export default async function DashboardPage() {
             </p>
           </div>
           <Link href="/dashboard/new">
-            <Button variant="gradient" size="lg">
+            <Button variant="gradient" size="lg" className="w-full sm:w-auto">
               <Plus className="w-5 h-5" /> New Audit
             </Button>
           </Link>
