@@ -1,57 +1,66 @@
 ﻿import { groq } from "./groq";
 
 async function fetchWebsiteContent(url: string): Promise<string> {
+  const hasSSL = url.startsWith("https://");
+
+  // Use Jina Reader to get fully-rendered page content (handles JS-heavy sites)
+  let jinaContent = "";
   try {
-    const res = await fetch(url, {
+    const jinaRes = await fetch(`https://r.jina.ai/${url}`, {
+      headers: {
+        "Accept": "text/plain",
+        "User-Agent": "Mozilla/5.0 (compatible; AuditRoast/1.0)",
+        "X-Return-Format": "text",
+      },
+      signal: AbortSignal.timeout(20000),
+    });
+    if (jinaRes.ok) {
+      jinaContent = (await jinaRes.text()).slice(0, 6000);
+    }
+  } catch {
+    // fall through to raw HTML
+  }
+
+  // Also fetch raw HTML for metadata not in Jina output
+  let metaData = "";
+  try {
+    const rawRes = await fetch(url, {
       headers: { "User-Agent": "Mozilla/5.0 (compatible; AuditRoast/1.0)" },
       signal: AbortSignal.timeout(10000),
     });
-
-    if (!res.ok) return `Could not fetch website (HTTP ${res.status})`;
-
-    const html = await res.text();
-
-    const title = html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]?.trim() ?? "";
-    const metaDesc = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i)?.[1]?.trim()
-      ?? html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*name=["']description["']/i)?.[1]?.trim()
-      ?? "";
-    const h1s = [...html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/gi)].map(m => m[1].replace(/<[^>]+>/g, "").trim()).filter(Boolean).join(" | ");
-    const h2s = [...html.matchAll(/<h2[^>]*>([\s\S]*?)<\/h2>/gi)].map(m => m[1].replace(/<[^>]+>/g, "").trim()).filter(Boolean).slice(0, 8).join(" | ");
-    const h3s = [...html.matchAll(/<h3[^>]*>([\s\S]*?)<\/h3>/gi)].map(m => m[1].replace(/<[^>]+>/g, "").trim()).filter(Boolean).slice(0, 6).join(" | ");
-    const buttons = [...html.matchAll(/<button[^>]*>([\s\S]*?)<\/button>/gi)].map(m => m[1].replace(/<[^>]+>/g, "").trim()).filter(Boolean).slice(0, 10).join(" | ");
-    const navLinks = [...html.matchAll(/<a[^>]*>([\s\S]*?)<\/a>/gi)].map(m => m[1].replace(/<[^>]+>/g, "").trim()).filter(t => t.length > 1 && t.length < 60).slice(0, 20).join(" | ");
-    const inputs = [...html.matchAll(/<input[^>]*>/gi)].map(m => m[0].match(/placeholder=["']([^"']+)["']/i)?.[1] ?? m[0].match(/type=["']([^"']+)["']/i)?.[1] ?? "").filter(Boolean).slice(0, 10).join(" | ");
-    const hasSSL = url.startsWith("https://");
-    const formCount = (html.match(/<form/gi) ?? []).length;
-    const imgAlts = [...html.matchAll(/<img[^>]*alt=["']([^"']+)["']/gi)].map(m => m[1].trim()).filter(Boolean).slice(0, 5).join(" | ");
-    const metaViewport = /<meta[^>]*name=["']viewport["']/i.test(html) ? "Yes" : "No";
-
-    const bodyText = html
-      .replace(/<script[\s\S]*?<\/script>/gi, "")
-      .replace(/<style[\s\S]*?<\/style>/gi, "")
-      .replace(/<[^>]+>/g, " ")
-      .replace(/\s+/g, " ")
-      .trim()
-      .slice(0, 2500);
-
-    return `
-URL: ${url}
-SSL/HTTPS: ${hasSSL ? "Yes" : "No"}
-Title tag: ${title}
-Meta description: ${metaDesc}
-Viewport meta tag (mobile): ${metaViewport}
-H1: ${h1s || "MISSING"}
-H2s: ${h2s || "MISSING"}
-H3s: ${h3s || "none found"}
-Button text: ${buttons || "none found"}
-Navigation links: ${navLinks || "none found"}
-Form inputs (${formCount} form(s)): ${inputs || "none found"}
-Image alt texts: ${imgAlts || "none found"}
-Page text content: ${bodyText}
-    `.trim();
+    if (rawRes.ok) {
+      const html = await rawRes.text();
+      const title = html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]?.trim() ?? "";
+      const metaDesc = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i)?.[1]?.trim()
+        ?? html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*name=["']description["']/i)?.[1]?.trim()
+        ?? "";
+      const metaViewport = /<meta[^>]*name=["']viewport["']/i.test(html) ? "Yes" : "No";
+      const formCount = (html.match(/<form/gi) ?? []).length;
+      const h1s = [...html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/gi)].map(m => m[1].replace(/<[^>]+>/g, "").trim()).filter(Boolean).join(" | ");
+      const buttons = [...html.matchAll(/<button[^>]*>([\s\S]*?)<\/button>/gi)].map(m => m[1].replace(/<[^>]+>/g, "").trim()).filter(Boolean).slice(0, 10).join(" | ");
+      metaData = `Title tag: ${title}
+Meta description: ${metaDesc || "MISSING"}
+Viewport meta tag: ${metaViewport}
+Forms on page: ${formCount}
+H1 tags in HTML: ${h1s || "MISSING"}
+Button text found: ${buttons || "none found"}`;
+    }
   } catch {
+    // ignore
+  }
+
+  if (!jinaContent && !metaData) {
     return `Failed to fetch ${url} — analyse based on URL only`;
   }
+
+  return `URL: ${url}
+SSL/HTTPS: ${hasSSL ? "Yes" : "No"}
+
+--- TECHNICAL METADATA ---
+${metaData || "Could not extract metadata"}
+
+--- RENDERED PAGE CONTENT (via Jina Reader — this is what visitors actually see) ---
+${jinaContent || "Could not render page content"}`.trim();
 }
 
 export interface ActionTask {
@@ -90,12 +99,20 @@ export interface AuditResult {
 export async function analyzeWebsite(url: string): Promise<AuditResult> {
   const pageContent = await fetchWebsiteContent(url);
 
-  const prompt = `You are an expert conversion rate optimization (CRO) and UX analyst. Analyze the following website data scraped from: ${url}
+  const prompt = `You are an expert conversion rate optimization (CRO) and UX analyst. Analyze the following website data from: ${url}
+
+IMPORTANT RULES — follow these exactly:
+- Base ALL findings ONLY on what is present or absent in the data below
+- NEVER flag something as missing if it appears in the content
+- If you can see H1 tags, do NOT say H1 is missing
+- If you can see trust signals, do NOT say they are missing
+- Quote actual headlines, button text, or copy from the page to support your findings
+- Be specific and factual — no generic advice that could apply to any website
 
 REAL WEBSITE DATA:
 ${pageContent}
 
-Based ONLY on the actual content above, provide a comprehensive conversion audit in the following exact JSON format (no markdown, just JSON). Be specific — reference actual headlines, button text, and content you can see in the data above:
+Provide a comprehensive conversion audit in the following exact JSON format (no markdown, just JSON):
 
 {
   "overallScore": <0-100>,
