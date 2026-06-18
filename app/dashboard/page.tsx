@@ -121,36 +121,36 @@ export default async function DashboardPage() {
               {(audits as AuditRow[]).map((audit) => (
                 <Link key={audit.id} href={`/dashboard/audit/${audit.id}`}>
                   <Card className="hover:border-violet-500/30 transition-all cursor-pointer group">
-                    <CardContent className="p-5 flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-violet-600/20 rounded-xl flex items-center justify-center">
-                          <Globe className="w-5 h-5 text-violet-400" />
-                        </div>
-                        <div>
-                          <div className="font-medium text-white text-sm">{audit.url}</div>
-                          <div className="text-xs text-gray-500 mt-0.5">
+                    <CardContent className="p-4 sm:p-5 flex items-center gap-3">
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 bg-violet-600/20 rounded-xl flex items-center justify-center shrink-0">
+                        <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-violet-400" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-white text-sm truncate">{audit.url}</div>
+                        <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                          <span className="text-xs text-gray-500">
                             {format(new Date(audit.createdAt), "MMM d, yyyy")}
-                          </div>
+                          </span>
+                          <Badge
+                            variant={
+                              audit.status === "COMPLETE" ? "success" :
+                              audit.status === "FAILED" ? "danger" :
+                              "warning"
+                            }
+                          >
+                            {audit.status}
+                          </Badge>
+                          {audit.revenueOpportunity && (
+                            <span className="text-green-400 text-xs font-medium">
+                              +{formatCurrency(audit.revenueOpportunity)}/mo
+                            </span>
+                          )}
                         </div>
                       </div>
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2 shrink-0">
                         {audit.status === "COMPLETE" && audit.overallScore !== null && (
-                          <div className={`text-2xl font-bold ${getScoreColor(audit.overallScore)}`}>
+                          <div className={`text-xl font-bold ${getScoreColor(audit.overallScore)}`}>
                             {audit.overallScore}
-                          </div>
-                        )}
-                        <Badge
-                          variant={
-                            audit.status === "COMPLETE" ? "success" :
-                            audit.status === "FAILED" ? "danger" :
-                            "warning"
-                          }
-                        >
-                          {audit.status}
-                        </Badge>
-                        {audit.revenueOpportunity && (
-                          <div className="text-green-400 text-sm font-medium hidden sm:block">
-                            +{formatCurrency(audit.revenueOpportunity)}/mo
                           </div>
                         )}
                         <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-violet-400 transition-colors" />
