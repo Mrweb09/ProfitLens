@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/landing/navbar";
 import { Hero } from "@/components/landing/hero";
+import { AuditExample } from "@/components/landing/audit-example";
 import { Features } from "@/components/landing/features";
 import { Testimonials } from "@/components/landing/testimonials";
 import { Pricing } from "@/components/landing/pricing";
@@ -11,6 +12,7 @@ export default function Home() {
     <div className="min-h-screen bg-[#09090b]">
       <Navbar />
       <Hero />
+      <AuditExample />
       <Features />
       <Testimonials />
       <Pricing />
