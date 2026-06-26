@@ -20,28 +20,25 @@ export async function generateDM(
     messages: [
       {
         role: "system",
-        content: "You write casual, genuine Instagram DMs for outreach. Sound like a real person, not a bot or marketer.",
+        content: "You write short, punchy Instagram DMs that sound like a real 20-something texting a brand. No corporate speak. No full sentences where a fragment works. Think casual friend, not marketer.",
       },
       {
         role: "user",
-        content: `Write a casual Instagram DM to ${brandName} (${url}).
+        content: `Write an Instagram DM to ${brandName}.
 
-Their website audit score: ${score}/100
-Biggest problem found: [${topIssue?.category}] ${topIssue?.issue}
-Suggested fix: ${topIssue?.fix}
-Other issues spotted: ${otherIssues || "a few UX/conversion gaps"}
+The specific problem found on their site: ${topIssue?.issue}
 
-STRICT rules — breaking any of these ruins the message:
-- The opening line must reference ONLY the exact problem listed above. Do not invent or assume anything else about the site.
-- NEVER say "it's not clear what you sell" or "unclear value proposition" unless the biggest problem above explicitly says that. Use the EXACT issue described.
-- Quote or closely paraphrase the actual finding — be specific, not generic
-- Sound like a real person who genuinely looked at their site, not a bot
-- Briefly mention you ran a full audit and found more issues
-- Offer to send the full free report
-- Soft CTA at the end — "want me to send it over?" or similar
-- Under 150 words total
-- No emojis at the start
-- Conversational, not salesy`,
+Write it like this example style (do NOT copy this, just match the tone and length):
+"hey just had a look at your site - noticed [specific thing]. ran a full audit on it and spotted a few other things too. want me to send it over? it's free"
+
+Rules:
+- Max 3-4 sentences. Short. Punchy.
+- Start with "hey" — lowercase, casual
+- Reference ONLY the exact problem above — do not invent anything
+- Do NOT explain what a value proposition is, do NOT use corporate words like "visitors", "UX", "conversion", "optimise"
+- Mention you ran a full audit and found more
+- End with a soft CTA like "want me to send it over? free btw" or similar
+- Sound like a real person texting, not a tool or agency`,
       },
     ],
   });
