@@ -1,7 +1,5 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { groq } from "@/lib/groq";
 import type { AuditFinding } from "@/lib/audit-engine";
-
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
 
 export async function generateDM(
   brandName: string,
@@ -15,10 +13,15 @@ export async function generateDM(
     .map((f) => f.issue)
     .join("; ");
 
-  const response = await anthropic.messages.create({
-    model: "claude-sonnet-4-6",
+  const response = await groq.chat.completions.create({
+    model: "llama-3.3-70b-versatile",
     max_tokens: 300,
+    temperature: 0.8,
     messages: [
+      {
+        role: "system",
+        content: "You write casual, genuine Instagram DMs for outreach. Sound like a real person, not a bot or marketer.",
+      },
       {
         role: "user",
         content: `Write a casual Instagram DM to ${brandName} (${url}).
@@ -42,5 +45,5 @@ Rules:
     ],
   });
 
-  return (response.content[0] as { text: string }).text.trim();
+  return response.choices[0].message.content?.trim() ?? "";
 }
