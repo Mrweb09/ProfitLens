@@ -211,9 +211,16 @@ CRITICAL RULES — follow exactly or the audit is invalid:
 - If Meta description shows a value, do NOT say meta description is missing
 - If H1 tags show values, do NOT say H1 is missing
 - For well-known brands (${siteContext.sizeHint.includes("large enterprise") ? "this is a large enterprise brand" : "standard site"}): do not flag basic elements (SSL, meta tags, mobile viewport) as issues unless the data confirms they are missing
-- Quote actual text from the page content to evidence each finding — if you cannot quote it, do not make the finding
 - ALL findings must be relevant to a ${siteContext.type} in the ${siteContext.industry} industry
 - Revenue estimates must be proportionate to the site's size — a large enterprise losing £5k/mo on one issue is plausible; a small business losing £5M is not
+
+SPECIFICITY RULES — the most important rules:
+- Every "issue" field MUST quote or name actual elements from the page data above (e.g. actual product names, actual button text, actual headlines, actual section names). Generic findings like "homepage is cluttered" or "unclear value proposition" are NOT allowed.
+- BAD example: "The homepage is cluttered and lacks a clear value proposition"
+- GOOD example: "The homepage opens with 6 product categories (Treadmills, Bikes, Rowers, Cross Trainers, Ellipticals, Weights) and a rotating banner, but no single headline explains who JTX Fitness is for or why they're better than Peloton or NordicTrack"
+- BAD example: "CTAs are not prominent enough"
+- GOOD example: "The main CTA 'Shop Now' appears below the fold and competes with 4 other links ('Finance', 'Reviews', 'Trade', 'About') in the same visual weight"
+- If you cannot write a specific finding backed by actual page content, skip that finding entirely
 
 REAL WEBSITE DATA:
 ${pageContent}
