@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -127,10 +127,51 @@ export function ProspectsClient({ initialProspects }: { initialProspects: Prospe
   const [filter, setFilter] = useState<"all" | "pending" | "sent" | "replied">("all");
   const [running, setRunning] = useState(false);
   const [runMsg, setRunMsg] = useState("");
+  const [polling, setPolling] = useState(false);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   function handleStatusChange(id: string, status: string) {
     setProspects((prev) => prev.map((p) => p.id === id ? { ...p, status: status as Prospect["status"] } : p));
   }
+
+  function startPolling() {
+    setPolling(true);
+    let attempts = 0;
+    const prevCount = prospects.length;
+
+    pollRef.current = setInterval(async () => {
+      attempts++;
+      try {
+        const res = await fetch("/api/pipeline/prospects");
+        if (res.ok) {
+          const data: Prospect[] = await res.json();
+          if (data.length > prevCount) {
+            setProspects(data);
+            setRunMsg(`Found ${data.length - prevCount} new prospect${data.length - prevCount !== 1 ? "s" : ""}!`);
+            stopPolling();
+            return;
+          }
+        }
+      } catch { /* ignore */ }
+
+      if (attempts >= 36) { // 6 minutes max
+        setRunMsg("Pipeline is still running — refresh in a few minutes.");
+        stopPolling();
+      } else {
+        setRunMsg(`Searching... (${attempts * 10}s)`);
+      }
+    }, 10000);
+  }
+
+  function stopPolling() {
+    setPolling(false);
+    if (pollRef.current) {
+      clearInterval(pollRef.current);
+      pollRef.current = null;
+    }
+  }
+
+  useEffect(() => () => stopPolling(), []);
 
   async function triggerPipeline() {
     setRunning(true);
@@ -146,7 +187,8 @@ export function ProspectsClient({ initialProspects }: { initialProspects: Prospe
       if (!res.ok) {
         setRunMsg(`Error ${res.status}: ${data.error ?? res.statusText}`);
       } else {
-        setRunMsg(data.message ?? "Pipeline started — check back in a few minutes.");
+        setRunMsg(data.message ?? "Pipeline started...");
+        startPolling();
       }
     } catch (err) {
       setRunMsg(`Failed: ${err}`);
