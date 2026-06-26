@@ -31,11 +31,12 @@ Biggest problem found: [${topIssue?.category}] ${topIssue?.issue}
 Suggested fix: ${topIssue?.fix}
 Other issues spotted: ${otherIssues || "a few UX/conversion gaps"}
 
-Rules:
-- Open with their specific problem — not "love your brand" or generic flattery
+STRICT rules — breaking any of these ruins the message:
+- The opening line must reference ONLY the exact problem listed above. Do not invent or assume anything else about the site.
+- NEVER say "it's not clear what you sell" or "unclear value proposition" unless the biggest problem above explicitly says that. Use the EXACT issue described.
+- Quote or closely paraphrase the actual finding — be specific, not generic
 - Sound like a real person who genuinely looked at their site, not a bot
-- Mention one specific thing you noticed (use the biggest problem above)
-- Briefly mention you ran a full audit and found more
+- Briefly mention you ran a full audit and found more issues
 - Offer to send the full free report
 - Soft CTA at the end — "want me to send it over?" or similar
 - Under 150 words total
