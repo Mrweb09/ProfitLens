@@ -136,12 +136,9 @@ export function ProspectsClient({ initialProspects }: { initialProspects: Prospe
     setRunning(true);
     setRunMsg("Starting pipeline...");
     try {
-      const res = await fetch("/api/pipeline/run", {
+      const res = await fetch("/api/pipeline/trigger", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET ?? ""}`,
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ count: 10 }),
       });
       const data = await res.json();
