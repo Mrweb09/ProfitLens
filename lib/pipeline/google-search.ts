@@ -27,10 +27,8 @@ function extractBrandName(title: string, domain: string): string {
 }
 
 export async function searchShopifyStores(count = 30): Promise<ProspectCandidate[]> {
-  const apiKey = process.env.GOOGLE_CUSTOM_SEARCH_API_KEY;
-  const cx = process.env.GOOGLE_SEARCH_CX;
-
-  if (!apiKey || !cx) throw new Error("Missing GOOGLE_CUSTOM_SEARCH_API_KEY or GOOGLE_SEARCH_CX");
+  const apiKey = process.env.SERPER_API_KEY;
+  if (!apiKey) throw new Error("Missing SERPER_API_KEY");
 
   const results: ProspectCandidate[] = [];
   const seen = new Set<string>();
@@ -40,20 +38,25 @@ export async function searchShopifyStores(count = 30): Promise<ProspectCandidate
     if (results.length >= count) break;
 
     try {
-      const res = await fetch(
-        `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${encodeURIComponent(query)}&num=10`,
-        { signal: AbortSignal.timeout(10000) }
-      );
+      const res = await fetch("https://google.serper.dev/search", {
+        method: "POST",
+        headers: {
+          "X-API-KEY": apiKey,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ q: query, num: 10 }),
+        signal: AbortSignal.timeout(10000),
+      });
 
       if (!res.ok) {
-        console.error(`Google search failed for "${query}": ${res.status}`);
+        console.error(`Serper search failed for "${query}": ${res.status}`);
         continue;
       }
 
       const data = await res.json();
-      if (!data.items) continue;
+      const items = data.organic ?? [];
 
-      for (const item of data.items as Array<{ link: string; title: string }>) {
+      for (const item of items as Array<{ link: string; title: string }>) {
         if (results.length >= count) break;
         try {
           const parsed = new URL(item.link);
@@ -68,7 +71,7 @@ export async function searchShopifyStores(count = 30): Promise<ProspectCandidate
         }
       }
 
-      await new Promise((r) => setTimeout(r, 500));
+      await new Promise((r) => setTimeout(r, 300));
     } catch (err) {
       console.error(`Search query failed: ${query}`, err);
     }
