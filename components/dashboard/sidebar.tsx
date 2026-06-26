@@ -18,11 +18,13 @@ import {
   BarChart3,
   Menu,
   X,
+  Users,
 } from "lucide-react";
 
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/new", label: "New Audit", icon: Plus },
+  { href: "/dashboard/prospects", label: "Prospects", icon: Users, isNew: true },
   { href: "/dashboard/competitor", label: "Competitor Check", icon: Trophy },
   { href: "/leaderboard", label: "Leaderboard", icon: BarChart3, isNew: true },
   { href: "/dashboard/bulk", label: "Bulk Audit", icon: Zap, isNew: true },
