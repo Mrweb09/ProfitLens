@@ -202,15 +202,18 @@ SITE CONTEXT — use this to make findings relevant:
 - Size: ${siteContext.sizeHint}
 - Type-specific focus: ${typeInstructions}
 
-CRITICAL RULES — follow exactly:
-- Base ALL findings ONLY on what is present or absent in the verified data below
-- NEVER flag something as missing if it appears in the content or technical metadata
-- If Title, H1, or meta description are shown as present above, do NOT say they are missing
-- Quote actual headlines, button text, or copy from the page to support your findings
-- Be specific and factual — no generic advice that could apply to any website
+CRITICAL RULES — follow exactly or the audit is invalid:
+- Base ALL findings ONLY on what is present or absent in the VERIFIED DATA below
+- NEVER invent specific numbers not found in the data — no fake load times, no invented scores, no made-up percentages
+- Do NOT say "page load time is X seconds" unless it appears in the data — you cannot measure load time from HTML
+- NEVER say something is "missing" or "absent" unless the technical metadata above explicitly shows it as MISSING
+- If Title shows a value (not "MISSING"), do NOT flag the title as missing or poor
+- If Meta description shows a value, do NOT say meta description is missing
+- If H1 tags show values, do NOT say H1 is missing
+- For well-known brands (${siteContext.sizeHint.includes("large enterprise") ? "this is a large enterprise brand" : "standard site"}): do not flag basic elements (SSL, meta tags, mobile viewport) as issues unless the data confirms they are missing
+- Quote actual text from the page content to evidence each finding — if you cannot quote it, do not make the finding
 - ALL findings must be relevant to a ${siteContext.type} in the ${siteContext.industry} industry
-- For large/enterprise sites: acknowledge their scale, focus on incremental improvements and missed opportunities at scale
-- Revenue estimates must be realistic for the site's size and industry
+- Revenue estimates must be proportionate to the site's size — a large enterprise losing £5k/mo on one issue is plausible; a small business losing £5M is not
 
 REAL WEBSITE DATA:
 ${pageContent}
