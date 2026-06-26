@@ -194,39 +194,30 @@ export async function analyzeWebsite(url: string): Promise<AuditResult> {
 
   const typeInstructions = siteTypeInstructions[siteContext.type] ?? siteTypeInstructions["business website"];
 
-  const prompt = `You are an expert conversion rate optimization (CRO) and UX analyst. Analyze the following website data from: ${url}
+  const prompt = `Analyze this ${siteContext.type} website (${siteContext.industry} industry): ${url}
 
-SITE CONTEXT — use this to make findings relevant:
-- Site type: ${siteContext.type}
-- Industry: ${siteContext.industry}
-- Size: ${siteContext.sizeHint}
-- Type-specific focus: ${typeInstructions}
-
-CRITICAL RULES — follow exactly or the audit is invalid:
-- Base ALL findings ONLY on what is present or absent in the VERIFIED DATA below
-- NEVER invent specific numbers not found in the data — no fake load times, no invented scores, no made-up percentages
-- Do NOT say "page load time is X seconds" unless it appears in the data — you cannot measure load time from HTML
-- NEVER say something is "missing" or "absent" unless the technical metadata above explicitly shows it as MISSING
-- If Title shows a value (not "MISSING"), do NOT flag the title as missing or poor
-- If Meta description shows a value, do NOT say meta description is missing
-- If H1 tags show values, do NOT say H1 is missing
-- For well-known brands (${siteContext.sizeHint.includes("large enterprise") ? "this is a large enterprise brand" : "standard site"}): do not flag basic elements (SSL, meta tags, mobile viewport) as issues unless the data confirms they are missing
-- ALL findings must be relevant to a ${siteContext.type} in the ${siteContext.industry} industry
-- Revenue estimates must be proportionate to the site's size — a large enterprise losing £5k/mo on one issue is plausible; a small business losing £5M is not
-
-SPECIFICITY RULES — the most important rules:
-- Every "issue" field MUST quote or name actual elements from the page data above (e.g. actual product names, actual button text, actual headlines, actual section names). Generic findings like "homepage is cluttered" or "unclear value proposition" are NOT allowed.
-- BAD example: "The homepage is cluttered and lacks a clear value proposition"
-- GOOD example: "The homepage opens with 6 product categories (Treadmills, Bikes, Rowers, Cross Trainers, Ellipticals, Weights) and a rotating banner, but no single headline explains who JTX Fitness is for or why they're better than Peloton or NordicTrack"
-- BAD example: "CTAs are not prominent enough"
-- GOOD example: "The main CTA 'Shop Now' appears below the fold and competes with 4 other links ('Finance', 'Reviews', 'Trade', 'About') in the same visual weight"
-- If you cannot write a specific finding backed by actual page content, skip that finding entirely
-
-REAL WEBSITE DATA:
+PAGE DATA:
 ${pageContent}
 
-Provide a comprehensive conversion audit in the following exact JSON format (no markdown, just JSON):
+YOUR JOB: Write conversion audit findings that are so specific that someone reading them would know EXACTLY which page element you're talking about, without visiting the site themselves.
 
+RULE #1 — SPECIFICITY (most important rule):
+Every "issue" MUST name real things from the page data above: actual headlines, actual button labels, actual product names, actual section names, actual prices if visible.
+- FORBIDDEN: "The homepage lacks a clear value proposition"
+- FORBIDDEN: "CTAs are not prominent"
+- FORBIDDEN: "The site is cluttered"
+- REQUIRED: Name the ACTUAL headline, ACTUAL button text, ACTUAL products you can see in the data
+- If you can't name a specific element from the data, skip that finding
+
+RULE #2 — NO INVENTION:
+- Never mention load times — you cannot measure them from HTML
+- Never say something is MISSING unless the metadata explicitly says MISSING
+- No fake percentages or made-up statistics
+
+RULE #3 — RELEVANCE:
+Site type: ${siteContext.type} | Focus: ${typeInstructions}
+
+Return ONLY this JSON (no markdown):
 {
   "overallScore": <0-100>,
   "trustScore": <0-100>,
@@ -234,46 +225,32 @@ Provide a comprehensive conversion audit in the following exact JSON format (no 
   "seoScore": <0-100>,
   "mobileScore": <0-100>,
   "revenueScore": <0-100>,
-  "monthlyVisitors": <estimated monthly visitors>,
-  "currentConvRate": <estimated current conversion rate as decimal e.g. 0.02>,
-  "potentialUplift": <potential conversion rate uplift as decimal e.g. 0.015>,
-  "revenueOpportunity": <estimated additional monthly revenue in GBP>,
+  "monthlyVisitors": <estimated>,
+  "currentConvRate": <decimal e.g. 0.02>,
+  "potentialUplift": <decimal>,
+  "revenueOpportunity": <GBP per month>,
   "findings": [
     {
-      "category": "<Homepage|Mobile|CTA|Trust|SEO|Navigation|Forms|Pricing|Social Proof|Speed>",
-      "issue": "<clear description of the problem>",
+      "category": "<Homepage|Mobile|CTA|Trust|SEO|Navigation|Pricing|Social Proof>",
+      "issue": "<SPECIFIC issue naming real elements from the page>",
       "impact": "<why this hurts conversions>",
       "priority": "<HIGH|MEDIUM|LOW>",
-      "fix": "<exact actionable fix>",
-      "revenueImpact": "<estimated revenue impact e.g. +£500/mo>"
+      "fix": "<exact actionable fix referencing the specific element>",
+      "revenueImpact": "<e.g. +£500/mo>"
     }
   ],
-  "recommendations": [
-    <top 5 recommendations in same format as findings>
-  ],
-  "roastContent": "<A brutally honest, direct, slightly humorous roast of the website's conversion problems. 3-4 paragraphs. Viral/shareable tone. Be specific about what's wrong.>"
+  "recommendations": [<top 5 in same format>],
+  "roastContent": "<Brutally honest, funny roast. 3-4 paragraphs. Name specific things from the page. Viral tone.>"
 }
 
-Analyze these areas critically:
-1. Homepage clarity - can visitors understand what you sell in 5 seconds?
-2. Mobile responsiveness and experience
-3. Calls-to-action - visibility, clarity, placement
-4. Trust signals - reviews, testimonials, guarantees, security badges
-5. Pricing visibility and clarity
-6. Social proof - case studies, logos, reviews
-7. Navigation friction - too many options?
-8. Form friction - too many fields?
-9. SEO fundamentals - meta tags, headings, page speed signals
-10. Conversion bottlenecks - what's stopping visitors from converting?
-
-Be specific, actionable, and honest. Generate at least 8 findings. The roast should be funny but accurate.`;
+Generate at least 8 findings. Every single finding must pass the specificity test: could a stranger identify the exact element you're describing?`;
 
   const response = await groq.chat.completions.create({
     model: "llama-3.3-70b-versatile",
     messages: [
       {
         role: "system",
-        content: "You are a world-class CRO expert and web analyst. You analyze websites and provide brutally honest, data-driven conversion audits. Always respond with valid JSON only.",
+        content: "You are a world-class CRO expert. You write brutally specific audit findings that name real elements — actual headlines, actual button text, actual product names from the page. You NEVER write generic findings like 'unclear value proposition' or 'poor CTAs'. Every finding names something specific you can see on the page. Respond with valid JSON only.",
       },
       {
         role: "user",
