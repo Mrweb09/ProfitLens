@@ -141,10 +141,15 @@ export function ProspectsClient({ initialProspects }: { initialProspects: Prospe
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ count: 10 }),
       });
-      const data = await res.json();
-      setRunMsg(data.message ?? "Pipeline started — check back in a few minutes.");
-    } catch {
-      setRunMsg("Failed to start pipeline.");
+      let data: { message?: string; error?: string } = {};
+      try { data = await res.json(); } catch { /* non-JSON response */ }
+      if (!res.ok) {
+        setRunMsg(`Error ${res.status}: ${data.error ?? res.statusText}`);
+      } else {
+        setRunMsg(data.message ?? "Pipeline started — check back in a few minutes.");
+      }
+    } catch (err) {
+      setRunMsg(`Failed: ${err}`);
     } finally {
       setRunning(false);
     }
